@@ -12,6 +12,7 @@ const Update = () => {
 
   const navigate = useNavigate()
   const location = useLocation()
+  console.log(location)
   const bookId = location.pathname.split("/")[2]
   const handleChange = (e) => {
       setBook({...book, [e.target.name]: e.target.value})
