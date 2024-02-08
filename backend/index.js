@@ -15,9 +15,10 @@ app.use(express.json());
 // app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.json("hello");
+  return res.json("<h1>Hello</h1>");
 });
 
+// get all books
 app.get("/books", (req, res) => {
   const q = "SELECT * FROM books";
   db.query(q, (err, data) => {
@@ -26,7 +27,7 @@ app.get("/books", (req, res) => {
   });
 });
 
-
+// delete particular books
 app.delete("/books/:id", (req, res) => {
   const bookId = req.params.id;
   const q = "DELETE FROM books WHERE id = ?";
@@ -36,9 +37,12 @@ app.delete("/books/:id", (req, res) => {
   });
 });
 
-
+// update book data 
 app.put("/books/:id", (req, res) => {
   const bookId = req.params.id;
+  if (!req.body.title || !req.body.desc || !req.body.price || !req.body.cover) {
+    return res.status(400).json(error);
+  }
   const q = "UPDATE books SET `title`=?,`desc`=?,`price`=?,`cover`=? WHERE id = ?";
   const values = [
     req.body.title,
@@ -53,7 +57,11 @@ app.put("/books/:id", (req, res) => {
   });
 });
 
+// adding books
 app.post("/books", (req, res) => {
+  if (!req.body.title || !req.body.desc || !req.body.price || !req.body.cover) {
+    return res.status(400).json(error);
+  }
   const q = "INSERT INTO books (`title`,`desc`,`price`, `cover`) VALUES (?)";
   const values = [
     req.body.title,
